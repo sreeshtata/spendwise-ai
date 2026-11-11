@@ -1,0 +1,308 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "SpendWise AI — Smart Spending Assistant API",
+    "version": "1.0.0",
+    "description": "Enterprise-grade REST API for SpendWise AI. Provides Smart Budget Plans, Smarter Product Search, Spending Intelligence (Peer Spending Context & My Spending Progress), and PayPal Sandbox test payments."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3001/api/v1",
+      "description": "Local development server"
+    },
+    {
+      "url": "https://spendwise-ai.onrender.com/api/v1",
+      "description": "Render Production environment"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Supabase Auth JWT Bearer Token"
+      }
+    },
+    "schemas": {
+      "ApiError": {
+        "type": "object",
+        "properties": {
+          "code": { "type": "string", "example": "INVALID_INPUT" },
+          "message": { "type": "string", "example": "The request payload failed validation." },
+          "requestId": { "type": "string", "example": "req-98f92b45-12a8" },
+          "details": { "type": "object" }
+        },
+        "required": ["code", "message", "requestId"]
+      },
+      "Transaction": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "userId": { "type": "string", "format": "uuid" },
+          "amountMinor": { "type": "integer", "minimum": 0, "description": "Amount in integer minor units (e.g. cents/paise)" },
+          "currency": { "type": "string", "enum": ["USD", "EUR", "GBP", "INR", "CAD", "AUD"] },
+          "transactionType": { "type": "string", "enum": ["income", "expense", "transfer", "refund"] },
+          "status": { "type": "string", "enum": ["completed", "pending", "failed", "cancelled"] },
+          "categoryId": { "type": "string", "format": "uuid", "nullable": true },
+          "categoryName": { "type": "string" },
+          "purposeId": { "type": "string", "format": "uuid", "nullable": true },
+          "purposeName": { "type": "string" },
+          "merchant": { "type": "string" },
+          "description": { "type": "string", "nullable": true },
+          "occurredAt": { "type": "string", "format": "date-time" },
+          "source": { "type": "string", "enum": ["manual", "import", "sandbox", "demo"] },
+          "externalReference": { "type": "string", "nullable": true }
+        },
+        "required": ["id", "userId", "amountMinor", "currency", "transactionType", "status", "merchant", "occurredAt", "source"]
+      },
+      "CreateTransaction": {
+        "type": "object",
+        "properties": {
+          "amountMinor": { "type": "integer", "minimum": 1 },
+          "currency": { "type": "string", "enum": ["USD", "EUR", "GBP", "INR", "CAD", "AUD"] },
+          "transactionType": { "type": "string", "enum": ["income", "expense", "transfer", "refund"] },
+          "status": { "type": "string", "enum": ["completed", "pending", "failed", "cancelled"], "default": "completed" },
+          "categoryId": { "type": "string", "format": "uuid", "nullable": true },
+          "purposeId": { "type": "string", "format": "uuid", "nullable": true },
+          "merchant": { "type": "string" },
+          "description": { "type": "string", "nullable": true },
+          "occurredAt": { "type": "string", "format": "date-time" },
+          "source": { "type": "string", "enum": ["manual", "import", "sandbox", "demo"], "default": "manual" }
+        },
+        "required": ["amountMinor", "currency", "transactionType", "merchant", "occurredAt"]
+      },
+      "Budget": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "userId": { "type": "string", "format": "uuid" },
+          "periodYear": { "type": "integer" },
+          "periodMonth": { "type": "integer", "minimum": 1, "maximum": 12 },
+          "currency": { "type": "string" },
+          "totalIncomeEnvelopeMinor": { "type": "integer", "minimum": 0 },
+          "plannedSavingsMinor": { "type": "integer", "minimum": 0 },
+          "status": { "type": "string", "enum": ["active", "draft", "archived"] },
+          "allocations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "categoryId": { "type": "string", "format": "uuid" },
+                "categoryName": { "type": "string" },
+                "allocatedAmountMinor": { "type": "integer" },
+                "essentialMinimumMinor": { "type": "integer" },
+                "isEssential": { "type": "boolean" },
+                "actualSpentMinor": { "type": "integer" }
+              },
+              "required": ["categoryId", "allocatedAmountMinor", "essentialMinimumMinor", "isEssential"]
+            }
+          }
+        },
+        "required": ["id", "userId", "periodYear", "periodMonth", "currency", "totalIncomeEnvelopeMinor", "allocations"]
+      },
+      "ProductOffer": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "productIdentifier": { "type": "string" },
+          "brand": { "type": "string" },
+          "model": { "type": "string" },
+          "title": { "type": "string" },
+          "merchantName": { "type": "string" },
+          "merchantUrl": { "type": "string", "format": "uri" },
+          "itemSubtotalMinor": { "type": "integer" },
+          "shippingMinor": { "type": "integer" },
+          "taxesMinor": { "type": "integer" },
+          "mandatoryFeesMinor": { "type": "integer" },
+          "discountsMinor": { "type": "integer" },
+          "totalDeliveredMinor": { "type": "integer" },
+          "isPriceComplete": { "type": "boolean" },
+          "currency": { "type": "string" },
+          "availableQuantity": { "type": "integer" },
+          "productRating": { "type": "number", "nullable": true },
+          "productReviewCount": { "type": "integer", "nullable": true },
+          "ratingSourceName": { "type": "string", "nullable": true },
+          "warrantySummary": { "type": "string" },
+          "returnPolicy": { "type": "string" },
+          "deliveryDetails": { "type": "string" },
+          "isAlternative": { "type": "boolean" },
+          "rankingScore": { "type": "number" },
+          "rankingExplanation": { "type": "string" }
+        },
+        "required": ["id", "brand", "model", "merchantName", "totalDeliveredMinor", "isPriceComplete", "currency"]
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/profile": {
+      "get": {
+        "summary": "Retrieve user profile and preferences",
+        "responses": {
+          "200": { "description": "Authenticated profile" },
+          "401": { "description": "Unauthorized" }
+        }
+      },
+      "patch": {
+        "summary": "Update user preferences and reporting parameters",
+        "responses": {
+          "200": { "description": "Updated profile" }
+        }
+      }
+    },
+    "/transactions": {
+      "get": {
+        "summary": "List transactions with multi-field search and pagination",
+        "parameters": [
+          { "name": "query", "in": "query", "schema": { "type": "string" } },
+          { "name": "categoryId", "in": "query", "schema": { "type": "string" } },
+          { "name": "purposeId", "in": "query", "schema": { "type": "string" } },
+          { "name": "page", "in": "query", "schema": { "type": "integer", "default": 1 } },
+          { "name": "limit", "in": "query", "schema": { "type": "integer", "default": 20 } }
+        ],
+        "responses": {
+          "200": { "description": "Paginated transactions" }
+        }
+      },
+      "post": {
+        "summary": "Create a new verified transaction record",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateTransaction" }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Transaction created" }
+        }
+      }
+    },
+    "/transactions/csv-preview": {
+      "post": {
+        "summary": "Validate and preview CSV transaction file with formula injection guards",
+        "responses": {
+          "200": { "description": "Preview with line-by-line validation errors" }
+        }
+      }
+    },
+    "/transactions/csv-commit": {
+      "post": {
+        "summary": "Commit validated transactions from preview",
+        "responses": {
+          "201": { "description": "Successfully committed records" }
+        }
+      }
+    },
+    "/budgets/active": {
+      "get": {
+        "summary": "Get active budget and real-time category utilization",
+        "responses": {
+          "200": { "description": "Active budget and actual spending" }
+        }
+      }
+    },
+    "/budgets": {
+      "post": {
+        "summary": "Create or update monthly budget envelope and category allocations",
+        "responses": {
+          "200": { "description": "Budget saved successfully" }
+        }
+      }
+    },
+    "/budgets/recommendations": {
+      "get": {
+        "summary": "Generate AI-driven budget adjustments with verified baseline calculations",
+        "responses": {
+          "200": { "description": "Structured budget recommendations and reasoning" }
+        }
+      }
+    },
+    "/budgets/feedback": {
+      "post": {
+        "summary": "Submit explicit feedback (accept, reject, edit) on a recommendation",
+        "responses": {
+          "200": { "description": "Feedback acknowledged" }
+        }
+      }
+    },
+    "/products/search": {
+      "post": {
+        "summary": "Smarter Product Search across Channel3 with budget impact calculation",
+        "responses": {
+          "200": { "description": "Same-product offers and alternative offers" }
+        }
+      }
+    },
+    "/spending/peer": {
+      "get": {
+        "summary": "Peer Spending Context benchmark comparison for matched cohort",
+        "parameters": [
+          { "name": "purposeSlug", "in": "query", "required": true, "schema": { "type": "string" } },
+          { "name": "ageBand", "in": "query", "schema": { "type": "string" } },
+          { "name": "employmentStatus", "in": "query", "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Cohort median, distribution, and comparability notes" }
+        }
+      }
+    },
+    "/spending/progress": {
+      "get": {
+        "summary": "My Spending Progress comparing meaningfully aligned historical periods",
+        "parameters": [
+          { "name": "type", "in": "query", "schema": { "type": "string", "enum": ["prior_month", "prior_year_month", "prior_year_ytd"] } }
+        ],
+        "responses": {
+          "200": { "description": "Historical spending analysis, savings rate diff, and category trends" }
+        }
+      }
+    },
+    "/paypal/create-order": {
+      "post": {
+        "summary": "Create PayPal Sandbox test order with verified backend pricing",
+        "responses": {
+          "201": { "description": "PayPal Sandbox order created with approval URL" }
+        }
+      }
+    },
+    "/paypal/capture-order": {
+      "post": {
+        "summary": "Capture approved PayPal Sandbox order and record verified transaction",
+        "responses": {
+          "200": { "description": "Captured order and recorded transaction" }
+        }
+      }
+    },
+    "/paypal/webhook": {
+      "post": {
+        "summary": "Handle PayPal webhook events with signature and idempotency verification",
+        "responses": {
+          "200": { "description": "Webhook processed" }
+        }
+      }
+    },
+    "/integrations/status": {
+      "get": {
+        "summary": "Sanitized status of all external integrations (PayPal, Channel3, APIMatic, Elasticsearch, AI, Supabase)",
+        "responses": {
+          "200": { "description": "Integration health and driver states" }
+        }
+      }
+    },
+    "/integrations/reindex-elasticsearch": {
+      "post": {
+        "summary": "Synchronize and reindex all PostgreSQL transactions to Elasticsearch",
+        "responses": {
+          "200": { "description": "Reindexing summary" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "name": "spendwise-ai",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SpendWise AI — Smart Spending Assistant (PayPal Hackathon Prototype)",
+  "scripts": {
+    "build": "pnpm --filter @spendwise/contracts run build && pnpm --filter @spendwise/api run build && pnpm --filter @spendwise/web run build",
+    "test": "pnpm --filter @spendwise/api run test && pnpm --filter @spendwise/contracts run test",
+    "dev": "pnpm --parallel dev",
+    "dev:api": "pnpm --filter @spendwise/api run dev",
+    "dev:web": "pnpm --filter @spendwise/web run dev",
+    "typecheck": "pnpm -r run typecheck",
+    "lint": "pnpm -r run lint"
+  },
+  "devDependencies": {
+    "typescript": "5.4.5"
+  }
+}

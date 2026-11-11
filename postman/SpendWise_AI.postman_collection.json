@@ -1,0 +1,311 @@
+{
+  "info": {
+    "name": "SpendWise AI — Smart Spending Assistant API",
+    "_postman_id": "9812a6cb-f54e-4b68-b7cf-7a35b1c59021",
+    "description": "Comprehensive executable Postman collection for SpendWise AI API v1, covering Profiles, Transactions, Smart Budget Plans, Smarter Product Search, Spending Intelligence, and PayPal Sandbox payments.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/../health",
+          "host": ["{{baseUrl}}"],
+          "path": ["..", "health"]
+        }
+      }
+    },
+    {
+      "name": "Profile",
+      "item": [
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["profile"]
+            }
+          }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reportingTimezone\": \"America/New_York\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["profile"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Transactions",
+      "item": [
+        {
+          "name": "List Transactions (Elasticsearch Query)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/transactions?page=1&limit=20&query=Bistro",
+              "host": ["{{baseUrl}}"],
+              "path": ["transactions"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" },
+                { "key": "query", "value": "Bistro" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Verified Transaction",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"merchant\": \"Whole Foods Market\",\n  \"amountMinor\": 5420,\n  \"currency\": \"USD\",\n  \"transactionType\": \"expense\",\n  \"categoryId\": \"cat-groceries\",\n  \"purposeId\": \"purp-sustenance\",\n  \"occurredAt\": \"2024-03-15T12:00:00Z\",\n  \"source\": \"manual\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/transactions",
+              "host": ["{{baseUrl}}"],
+              "path": ["transactions"]
+            }
+          }
+        },
+        {
+          "name": "CSV Import Preview",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"csvContent\": \"Merchant,Amount,Currency,Type,Date\\nTrader Joe's,65.20,USD,expense,2024-03-10\\nPayroll,2600.00,USD,income,2024-03-15\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/transactions/csv-preview",
+              "host": ["{{baseUrl}}"],
+              "path": ["transactions", "csv-preview"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Smart Budget Plans",
+      "item": [
+        {
+          "name": "Get Active Budget",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/budgets/active",
+              "host": ["{{baseUrl}}"],
+              "path": ["budgets", "active"]
+            }
+          }
+        },
+        {
+          "name": "Get AI Budget Recommendations",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/budgets/recommendations",
+              "host": ["{{baseUrl}}"],
+              "path": ["budgets", "recommendations"]
+            }
+          }
+        },
+        {
+          "name": "Submit Recommendation Feedback",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"recommendationId\": \"rec-123\",\n  \"feedbackAction\": \"accepted\",\n  \"feedbackReason\": \"Agreed with dining reduction.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/budgets/feedback",
+              "host": ["{{baseUrl}}"],
+              "path": ["budgets", "feedback"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Smarter Product Search",
+      "item": [
+        {
+          "name": "Search Channel3 Offers with Budget Impact",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"queryDescription\": \"wireless noise cancelling headphones for productivity\",\n  \"purchasePurposeId\": \"purp-productivity\",\n  \"maxBudgetMinor\": 40000,\n  \"currency\": \"USD\",\n  \"quantity\": 1,\n  \"deliveryCountry\": \"US\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products/search",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "search"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Spending Intelligence",
+      "item": [
+        {
+          "name": "Peer Spending Context",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/spending/peer?purposeSlug=sustenance&ageBand=25-34&employmentStatus=professional",
+              "host": ["{{baseUrl}}"],
+              "path": ["spending", "peer"],
+              "query": [
+                { "key": "purposeSlug", "value": "sustenance" },
+                { "key": "ageBand", "value": "25-34" },
+                { "key": "employmentStatus", "value": "professional" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "My Spending Progress",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/spending/progress?type=prior_year_month",
+              "host": ["{{baseUrl}}"],
+              "path": ["spending", "progress"],
+              "query": [
+                { "key": "type", "value": "prior_year_month" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "PayPal Sandbox Checkout",
+      "item": [
+        {
+          "name": "Create PayPal Sandbox Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemDescription\": \"Anker Space Q45 Headphones\",\n  \"amountMinor\": 12039,\n  \"currency\": \"USD\",\n  \"purposeId\": \"purp-productivity\",\n  \"categoryId\": \"cat-tech\",\n  \"idempotencyKey\": \"postman-test-order-001\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/paypal/create-order",
+              "host": ["{{baseUrl}}"],
+              "path": ["paypal", "create-order"]
+            }
+          }
+        },
+        {
+          "name": "Capture PayPal Sandbox Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{authToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"paypalOrderId\": \"PAYPAL-TEST-SAMPLE-ORDER\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/paypal/capture-order",
+              "host": ["{{baseUrl}}"],
+              "path": ["paypal", "capture-order"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Integrations",
+      "item": [
+        {
+          "name": "Get Sanitized Integration Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/integrations/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["integrations", "status"]
+            }
+          }
+        },
+        {
+          "name": "Reindex Elasticsearch",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/integrations/reindex-elasticsearch",
+              "host": ["{{baseUrl}}"],
+              "path": ["integrations", "reindex-elasticsearch"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+@import 'ag-grid-community/styles/ag-grid.css';
+@import 'ag-grid-community/styles/ag-theme-alpine.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styling enhancements */
+body {
+  margin: 0;
+  background-color: #F8FAFC;
+  color: #0F172A;
+}
+
+.ag-theme-alpine {
+  --ag-header-background-color: #F1F5F9;
+  --ag-header-foreground-color: #0A2540;
+  --ag-border-color: #E2E8F0;
+  --ag-row-hover-color: #F8FAFC;
+  --ag-selected-row-background-color: #EFF6FF;
+  font-family: inherit;
+}

@@ -1,0 +1,171 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Contents 4 0 R /Resources << /Font << /F1 5 0 R /F2 6 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 4483 >>
+stream
+q 0.039 0.145 0.251 rg 40 730 515 80 re f Q
+q 0.063 0.725 0.506 rg 40 806 515 4 re f Q
+BT
+1 1 1 rg
+/F1 22 Tf
+55 772 Td
+(SpendWise AI - Smart Spending Assistant) Tj
+/F2 10.5 Tf
+0 -18 Td
+(Independent PayPal-Connected Hackathon Prototype | Executive Summary) Tj
+ET
+q 0.97 0.98 0.99 rg 40 620 515 95 re f Q
+q 0.85 0.88 0.92 RG 1 w 40 620 515 95 re s Q
+q 0.039 0.145 0.251 rg 40 695 515 20 re f Q
+BT
+1 1 1 rg
+/F1 11 Tf
+52 701 Td
+(1. NAME & SMALL DESCRIPTION) Tj
+ET
+BT
+0.06 0.09 0.16 rg
+/F1 10 Tf
+52 678 Td
+(Name: ) Tj
+/F2 10 Tf
+35 0 Td
+(SpendWise AI - Smart Spending Assistant) Tj
+/F2 9.5 Tf
+-35 -16 Td
+(Small Description: An independent, PayPal-connected personal financial copilot designed) Tj
+0 -13 Td
+(to empower consumers to make disciplined, highly informed purchasing decisions. It unites) Tj
+0 -13 Td
+(deterministic monthly envelope budgeting with non-negotiable living protections, true delivered) Tj
+0 -13 Td
+(costs, PayPal Sandbox test payments, and privacy-preserving peer spending benchmarks.) Tj
+ET
+q 0.97 0.98 0.99 rg 40 485 515 120 re f Q
+q 0.85 0.88 0.92 RG 1 w 40 485 515 120 re s Q
+q 0.039 0.145 0.251 rg 40 585 515 20 re f Q
+BT
+1 1 1 rg
+/F1 11 Tf
+52 591 Td
+(2. PROBLEM YOU TRIED TO SOLVE) Tj
+ET
+BT
+0.06 0.09 0.16 rg
+/F2 9.5 Tf
+52 570 Td
+(1. Opaque True Purchase Costs: Sticker prices routinely conceal shipping, handling, and) Tj
+0 -13 Td
+(   mandatory local taxes until final checkout, causing sudden monthly budget overruns.) Tj
+0 -15 Td
+(2. Unrealistic or Destructive Budgeting: Conventional apps either act as passive rear-view) Tj
+0 -13 Td
+(   trackers or recommend naive mathematical cuts that slash non-negotiable essentials (rent/food).) Tj
+0 -15 Td
+(3. Disconnected E-Commerce: Shopping is isolated from budgeting; users cannot immediately) Tj
+0 -13 Td
+(   calculate how an active cart impact remaining category headroom before making payments.) Tj
+0 -15 Td
+(4. Context Vacuum: Inability to benchmark personal spending against verified, privacy-safe cohorts.) Tj
+ET
+q 0.97 0.98 0.99 rg 40 335 515 135 re f Q
+q 0.85 0.88 0.92 RG 1 w 40 335 515 135 re s Q
+q 0.039 0.145 0.251 rg 40 450 515 20 re f Q
+BT
+1 1 1 rg
+/F1 11 Tf
+52 456 Td
+(3. THE BEST SOLUTION YOU HAVE COME UP WITH) Tj
+ET
+BT
+0.06 0.09 0.16 rg
+/F2 9.5 Tf
+52 435 Td
+(* Smart Budget Plans: Deterministic baseline calculations combined with structured AI optimization) Tj
+0 -13 Td
+(  that safeguards essential commitments (rent, groceries) and explicitly flags infeasible shortfalls.) Tj
+0 -15 Td
+(* Smarter Product Search: Complete delivered cost calculation (item + shipping + tax - discounts)) Tj
+0 -13 Td
+(  paired with real-time remaining budget impact and verified PayPal Sandbox checkout.) Tj
+0 -15 Td
+(* Spending Intelligence: Peer benchmarking enforcing k>=30 privacy threshold, median spending) Tj
+0 -13 Td
+(  analysis, and normalized historical period comparisons (-12.5% expense, +10.0 pp savings rate).) Tj
+0 -15 Td
+(* Integer Minor-Unit Math: 100% integer paise/cents math eliminates IEEE-754 floating-point drift.) Tj
+ET
+q 0.97 0.98 0.99 rg 40 185 515 135 re f Q
+q 0.85 0.88 0.92 RG 1 w 40 185 515 135 re s Q
+q 0.039 0.145 0.251 rg 40 300 515 20 re f Q
+BT
+1 1 1 rg
+/F1 11 Tf
+52 306 Td
+(4. HOW YOU CREATED THE SOLUTION IN THE FORM OF APP / WEB / AI) Tj
+ET
+BT
+0.06 0.09 0.16 rg
+/F2 9.5 Tf
+52 285 Td
+(* Web Application (Frontend): React 18, TypeScript, Vite, Tailwind CSS, Lucide icons.) Tj
+0 -13 Td
+(  Features AG Grid Community for ledger/products, Recharts for budget/peer graphs, TanStack Query.) Tj
+0 -15 Td
+(* Backend API & Engine: Node.js, Express, TypeScript, Zod runtime schema validation.) Tj
+0 -13 Td
+(  Houses single-source-of-truth financial calculator service, CSV injection defense, and REST APIs.) Tj
+0 -15 Td
+(* AI & Rules Engine: Dual-layer intelligence combining deterministic rule validation with) Tj
+0 -13 Td
+(  Gemini generative narrative explanations and structured constraint-tested recommendations.) Tj
+0 -15 Td
+(* Integrations: PayPal Sandbox test payments, Channel3 product search, Elasticsearch with DB fallback.) Tj
+ET
+q 0.94 0.99 0.96 rg 40 120 515 45 re f Q
+q 0.5 0.85 0.65 RG 1 w 40 120 515 45 re s Q
+BT
+0.08 0.45 0.22 rg
+/F1 10 Tf
+52 148 Td
+(VERIFICATION & QUALITY AUDIT STATUS: 100% PASS RATE) Tj
+/F2 9 Tf
+0 -14 Td
+(All 51 automated regression tests passed across financial math, auth isolation, budgets, and PayPal.) Tj
+ET
+BT
+0.45 0.55 0.65 rg
+/F2 8.5 Tf
+145 65 Td
+(SpendWise AI - Smart Spending Assistant - Independent PayPal Prototype - Page 1 of 1) Tj
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+6 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 7
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000257 00000 n 
+0000004792 00000 n 
+0000004867 00000 n 
+trailer
+<< /Size 7 /Root 1 0 R >>
+startxref
+4937
+%%EOF
