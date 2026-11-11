@@ -9,6 +9,7 @@ export function getActiveUserToken(): string {
 export const sdkClient = new SpendWiseClient({
   baseUrl: API_BASE_URL,
   authToken: getActiveUserToken(),
+  timeoutMs: 60000, // 60 s — prevents signal-abort on slow sandbox/AI calls
 });
 
 export function setAppUser(userToken: 'demo-user-1' | 'demo-user-2') {

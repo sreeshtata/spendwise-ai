@@ -28,30 +28,29 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenTestCheckout }) => {
     window.location.reload();
   };
 
-  // Nav links WITHOUT "Overview" (clicking the top-left logo redirects to dashboard)
+  // Nav links strictly configured for clean 2-line display (never 3 lines)
   const navLinks = [
-    { name: 'Smart Budget Plans', path: '/budgets', icon: Sparkles },
-    { name: 'Smarter Product Search', path: '/search', icon: ShoppingBag },
-    { name: 'Spending Intelligence', path: '/spending', icon: TrendingUp },
-    { name: 'Transactions', path: '/transactions', icon: ListFilter },
-    { name: 'Settings', path: '/settings', icon: Settings },
+    { line1: 'Smart Budget', line2: 'Plans', path: '/budgets', icon: Sparkles },
+    { line1: 'Smarter', line2: 'Product Search', path: '/search', icon: ShoppingBag },
+    { line1: 'Spending', line2: 'Intelligence', path: '/spending', icon: TrendingUp },
+    { line1: 'Transactions', line2: 'Ledger', path: '/transactions', icon: ListFilter },
+    { line1: 'System', line2: 'Settings', path: '/settings', icon: Settings },
   ];
 
   return (
     <header className="w-full bg-[#001C3D] text-white shadow-md sticky top-0 z-40 border-b border-[#002C66]">
       <div className="w-full px-4 sm:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-20 gap-4">
           
           {/* Big PayPal Logo & SpendWise AI Brand (Click redirects to Dashboard) */}
           <Link
             to="/"
-            className="flex items-center space-x-3.5 group cursor-pointer"
+            className="flex items-center space-x-3.5 group cursor-pointer shrink-0"
             title="SpendWise AI Dashboard"
           >
             {/* Big PayPal Logo Icon */}
             <div className="flex items-center justify-center w-12 h-12 rounded-2xl bg-white shadow-md group-hover:scale-105 transition-transform p-1.5 border border-slate-200">
               <svg className="w-8 h-8" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                {/* Authentic PayPal Double P monogram */}
                 <path
                   d="M10.5 4H20C23.5 4 25.5 5.8 25 9.5C24.4 14 21.5 16.5 17.5 16.5H13.8L12.2 26.5H7.5L10.5 4Z"
                   fill="#003087"
@@ -79,8 +78,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenTestCheckout }) => {
             </div>
           </Link>
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center space-x-2">
+          {/* Desktop Navigation Links: Comfortably Spaced with Guaranteed 2-Line Display */}
+          <nav className="hidden lg:flex items-center space-x-4 xl:space-x-6">
             {navLinks.map((link) => {
               const Icon = link.icon;
               const isActive = location.pathname === link.path;
@@ -88,21 +87,28 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenTestCheckout }) => {
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl text-base font-semibold transition-all ${
+                  className={`flex items-center space-x-3 px-3.5 py-2 rounded-2xl transition-all ${
                     isActive
                       ? 'bg-[#003087] text-white shadow-inner border border-[#0070BA]/50'
                       : 'text-blue-100 hover:text-white hover:bg-white/10'
                   }`}
                 >
-                  <Icon className="w-5 h-5 shrink-0" />
-                  <span>{link.name}</span>
+                  <Icon className="w-5 h-5 shrink-0 text-[#0079C1]" />
+                  <div className="flex flex-col text-left leading-snug">
+                    <span className="text-sm font-extrabold whitespace-nowrap text-white">
+                      {link.line1}
+                    </span>
+                    <span className="text-xs font-semibold whitespace-nowrap text-blue-200">
+                      {link.line2}
+                    </span>
+                  </div>
                 </Link>
               );
             })}
           </nav>
 
           {/* User Profile Switcher & Test Checkout Button */}
-          <div className="hidden sm:flex items-center space-x-3.5">
+          <div className="hidden sm:flex items-center space-x-3.5 shrink-0">
             {/* Quick Sandbox Payment Trigger */}
             <button
               onClick={onOpenTestCheckout}
@@ -155,8 +161,11 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenTestCheckout }) => {
                   isActive ? 'bg-[#003087] text-white' : 'text-blue-100 hover:bg-white/5'
                 }`}
               >
-                <Icon className="w-5 h-5" />
-                <span>{link.name}</span>
+                <Icon className="w-5 h-5 text-[#0079C1]" />
+                <div className="flex flex-col text-left leading-snug">
+                  <span className="text-sm font-bold text-white">{link.line1}</span>
+                  <span className="text-xs text-blue-200">{link.line2}</span>
+                </div>
               </Link>
             );
           })}
