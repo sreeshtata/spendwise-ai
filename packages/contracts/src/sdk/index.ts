@@ -150,8 +150,8 @@ export class TransactionsController {
   async list(filter: Partial<TransactionFilter> = {}): Promise<{ data: Transaction[]; total: number; page: number; limit: number }> {
     const params = new URLSearchParams();
     Object.entries(filter).forEach(([key, val]) => {
-      if (val !== undefined && val !== null) {
-        params.append(key, String(val));
+      if (val !== undefined && val !== null && String(val).trim() !== '') {
+        params.append(key, String(val).trim());
       }
     });
     const query = params.toString() ? `?${params.toString()}` : '';

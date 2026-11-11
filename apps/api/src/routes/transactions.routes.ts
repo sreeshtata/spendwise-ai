@@ -16,7 +16,16 @@ const searchService = new ElasticsearchService();
 
 transactionsRouter.get('/', async (req: AuthenticatedRequest, res: Response) => {
   const userId = req.userId!;
-  const filterParse = TransactionFilterSchema.safeParse(req.query);
+  
+  // Clean empty string query params so empty values do not fail min(1) validation
+  const cleanQuery: Record<string, any> = {};
+  for (const [key, val] of Object.entries(req.query)) {
+    if (val !== undefined && val !== null && String(val).trim() !== '') {
+      cleanQuery[key] = val;
+    }
+  }
+
+  const filterParse = TransactionFilterSchema.safeParse(cleanQuery);
 
   if (!filterParse.success) {
     return res.status(400).json({

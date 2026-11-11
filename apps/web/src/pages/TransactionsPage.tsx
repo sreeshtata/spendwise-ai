@@ -34,10 +34,10 @@ export const TransactionsPage: React.FC = () => {
 
   // Load Transactions with search filters
   const { data: txResponse, isLoading, refetch } = useQuery({
-    queryKey: ['transactions', { query: searchQuery, categoryId: selectedCategory || undefined }],
+    queryKey: ['transactions', { query: searchQuery.trim(), categoryId: selectedCategory || undefined }],
     queryFn: () =>
       sdkClient.transactions.list({
-        query: searchQuery || undefined,
+        query: searchQuery.trim() || undefined,
         categoryId: selectedCategory || undefined,
         limit: 100,
       }),
@@ -285,42 +285,45 @@ export const TransactionsPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Manual Add Modal */}
+      {/* Manual Add Modal (Solid dimming, NO blur, bold and centered) */}
       {isAddModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl p-6 max-w-md w-full shadow-2xl border border-slate-200 space-y-4">
-            <h3 className="text-lg font-bold text-navy-900">Add New Transaction</h3>
+        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl p-7 max-w-lg w-full shadow-2xl border-2 border-slate-300 space-y-5 animate-in fade-in zoom-in-95 duration-150">
+            <div className="border-b border-slate-200 pb-3">
+              <h3 className="text-xl font-extrabold text-navy-950">Add New Transaction</h3>
+              <p className="text-xs text-slate-500 mt-0.5">Record a manual verified transaction into your spending ledger.</p>
+            </div>
             
-            <div className="space-y-3 text-xs">
+            <div className="space-y-4 text-xs">
               <div>
-                <label className="font-semibold text-slate-700">Merchant Name</label>
+                <label className="font-bold text-slate-800 uppercase tracking-wider block mb-1">Merchant Name</label>
                 <input
                   type="text"
                   placeholder="e.g. Whole Foods Market"
                   value={newMerchant}
                   onChange={(e) => setNewMerchant(e.target.value)}
-                  className="w-full mt-1 px-3 py-2 border border-slate-300 rounded-lg text-sm"
+                  className="w-full px-3.5 py-2.5 border-2 border-slate-300 rounded-xl text-sm font-semibold text-slate-900 focus:border-navy-900 focus:outline-none"
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="font-semibold text-slate-700">Amount ($ USD)</label>
+                  <label className="font-bold text-slate-800 uppercase tracking-wider block mb-1">Amount ($ USD)</label>
                   <input
                     type="number"
                     step="0.01"
                     placeholder="45.00"
                     value={newAmount}
                     onChange={(e) => setNewAmount(e.target.value)}
-                    className="w-full mt-1 px-3 py-2 border border-slate-300 rounded-lg text-sm"
+                    className="w-full px-3.5 py-2.5 border-2 border-slate-300 rounded-xl text-sm font-bold text-slate-900 focus:border-navy-900 focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="font-semibold text-slate-700">Type</label>
+                  <label className="font-bold text-slate-800 uppercase tracking-wider block mb-1">Transaction Type</label>
                   <select
                     value={newType}
                     onChange={(e) => setNewType(e.target.value as any)}
-                    className="w-full mt-1 px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white"
+                    className="w-full px-3.5 py-2.5 border-2 border-slate-300 rounded-xl text-sm font-bold text-slate-900 bg-white focus:border-navy-900 focus:outline-none"
                   >
                     <option value="expense">Expense</option>
                     <option value="income">Income</option>
@@ -331,11 +334,11 @@ export const TransactionsPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="font-semibold text-slate-700">Category</label>
+                <label className="font-bold text-slate-800 uppercase tracking-wider block mb-1">Budget Category</label>
                 <select
                   value={newCategory}
                   onChange={(e) => setNewCategory(e.target.value)}
-                  className="w-full mt-1 px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white"
+                  className="w-full px-3.5 py-2.5 border-2 border-slate-300 rounded-xl text-sm font-semibold text-slate-900 bg-white focus:border-navy-900 focus:outline-none"
                 >
                   <option value="cat-groceries">Groceries & Food</option>
                   <option value="cat-dining">Dining & Drinks</option>
@@ -348,17 +351,17 @@ export const TransactionsPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex justify-end space-x-2 pt-2 border-t border-slate-200">
+            <div className="flex justify-end space-x-3 pt-3 border-t border-slate-200">
               <button
                 onClick={() => setIsAddModalOpen(false)}
-                className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-lg"
+                className="px-5 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-100 rounded-xl transition-colors border border-slate-300"
               >
                 Cancel
               </button>
               <button
                 onClick={() => addMutation.mutate()}
                 disabled={!newMerchant || !newAmount || addMutation.isPending}
-                className="px-4 py-2 text-xs font-semibold bg-navy-900 text-white rounded-lg hover:bg-navy-800 disabled:opacity-50"
+                className="px-6 py-2.5 text-xs font-bold bg-navy-950 text-white rounded-xl hover:bg-navy-900 disabled:opacity-50 transition-colors shadow-md"
               >
                 {addMutation.isPending ? 'Saving...' : 'Save Transaction'}
               </button>
@@ -367,10 +370,10 @@ export const TransactionsPage: React.FC = () => {
         </div>
       )}
 
-      {/* CSV Import Modal with Preview and Formula Injection Defense */}
+      {/* CSV Import Modal with Preview (Solid dimming, NO blur) */}
       {isCsvModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl p-6 max-w-2xl w-full shadow-2xl border border-slate-200 space-y-4">
+        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl p-7 max-w-2xl w-full shadow-2xl border-2 border-slate-300 space-y-4 animate-in fade-in zoom-in-95 duration-150">
             <h3 className="text-lg font-bold text-navy-900 flex items-center gap-2">
               <FileText className="w-5 h-5 text-indigo-600" />
               <span>Import Transactions via CSV</span>

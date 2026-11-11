@@ -1,7 +1,7 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { sdkClient } from '../../services/api';
-import { CheckCircle2, AlertCircle, Database, Search, Bot, CreditCard, Layers, Code2 } from 'lucide-react';
+import { Database, Search, Bot, CreditCard, Layers, Code2 } from 'lucide-react';
 
 export const IntegrationStatusBar: React.FC = () => {
   const { data: status, isLoading } = useQuery({
@@ -13,11 +13,11 @@ export const IntegrationStatusBar: React.FC = () => {
   if (isLoading || !status) return null;
 
   return (
-    <div className="bg-slate-100/90 border-b border-slate-300/80 px-4 sm:px-6 py-2.5 text-sm text-slate-700 shadow-xs">
-      <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-y-2">
-        <div className="flex items-center space-x-2">
-          <span className="font-bold text-navy-950 text-sm flex items-center gap-1.5">
-            <Layers className="w-4 h-4 text-emerald-600" />
+    <div className="w-full bg-[#F5F7FA] border-b border-slate-300/80 px-4 sm:px-8 py-2.5 text-sm text-slate-700 shadow-xs">
+      <div className="w-full flex flex-wrap items-center justify-between gap-y-2">
+        <div className="flex items-center space-x-2 shrink-0">
+          <span className="font-bold text-[#001C3D] text-sm flex items-center gap-1.5">
+            <Layers className="w-4 h-4 text-[#0070BA]" />
             Active Integrations:
           </span>
         </div>
@@ -25,9 +25,9 @@ export const IntegrationStatusBar: React.FC = () => {
         <div className="flex flex-wrap items-center gap-4 sm:gap-6">
           {/* PayPal */}
           <div className="flex items-center space-x-1.5" title="PayPal Sandbox Test Payment Engine">
-            <CreditCard className="w-4 h-4 text-blue-600" />
+            <CreditCard className="w-4 h-4 text-[#003087]" />
             <span className="font-semibold text-slate-800 text-sm">PayPal:</span>
-            <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-xs border border-emerald-300">
+            <span className="px-2.5 py-0.5 rounded-full bg-blue-100 text-[#003087] font-bold text-xs border border-blue-300">
               Sandbox Live
             </span>
           </div>
@@ -36,7 +36,7 @@ export const IntegrationStatusBar: React.FC = () => {
           <div className="flex items-center space-x-1.5" title="Channel3 Merchant Discovery Adapter">
             <Layers className="w-4 h-4 text-indigo-600" />
             <span className="font-semibold text-slate-800 text-sm">Channel3:</span>
-            <span className="px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800 font-bold text-xs border border-blue-300">
+            <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-xs border border-emerald-300">
               Universal Catalog Ready
             </span>
           </div>
@@ -63,7 +63,7 @@ export const IntegrationStatusBar: React.FC = () => {
             </span>
           </div>
 
-          {/* AI Service */}
+          {/* AI Engine */}
           <div className="flex items-center space-x-1.5" title={status.ai.provider}>
             <Bot className="w-4 h-4 text-orange-600" />
             <span className="font-semibold text-slate-800 text-sm">AI Engine:</span>
