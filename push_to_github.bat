@@ -12,18 +12,21 @@ echo Target Repo: https://github.com/sreeshtata/spendwise-ai
 echo Working Dir: %CD%
 echo.
 
-:: 1. Locate Git executable safely without parenthesis parsing issues
+:: 1. Locate Git executable (check portable .tools\git first, then system Git)
+if exist "%~dp0.tools\git\cmd\git.exe" (
+    set "PATH=%~dp0.tools\git\cmd;%~dp0.tools\git\mingw64\bin;!PATH!"
+    echo [INFO] Using portable Git runtime from .tools\git
+    goto :GIT_FOUND
+)
+
 where git >nul 2>&1
 if %ERRORLEVEL% equ 0 goto :GIT_FOUND
 
 set "GIT_DIR="
-if exist "%~dp0.tools\git\cmd\git.exe" set "GIT_DIR=%~dp0.tools\git\cmd"
-if not defined GIT_DIR if exist "%~dp0.tools\git\bin\git.exe" set "GIT_DIR=%~dp0.tools\git\bin"
-if not defined GIT_DIR if exist "%ProgramFiles%\Git\cmd\git.exe" set "GIT_DIR=%ProgramFiles%\Git\cmd"
-if not defined GIT_DIR if exist "C:\Program Files\Git\cmd\git.exe" set "GIT_DIR=C:\Program Files\Git\cmd"
-if not defined GIT_DIR if exist "C:\Program Files (x86)\Git\cmd\git.exe" set "GIT_DIR=C:\Program Files (x86)\Git\cmd"
-if not defined GIT_DIR if exist "%LocalAppData%\Programs\Git\cmd\git.exe" set "GIT_DIR=%LocalAppData%\Programs\Git\cmd"
-if not defined GIT_DIR if exist "C:\Program Files\Git\bin\git.exe" set "GIT_DIR=C:\Program Files\Git\bin"
+if exist "%ProgramFiles%\Git\cmd\git.exe" set "GIT_DIR=%ProgramFiles%\Git\cmd;%ProgramFiles%\Git\mingw64\bin"
+if not defined GIT_DIR if exist "C:\Program Files\Git\cmd\git.exe" set "GIT_DIR=C:\Program Files\Git\cmd;C:\Program Files\Git\mingw64\bin"
+if not defined GIT_DIR if exist "C:\Program Files (x86)\Git\cmd\git.exe" set "GIT_DIR=C:\Program Files (x86)\Git\cmd;C:\Program Files (x86)\Git\mingw64\bin"
+if not defined GIT_DIR if exist "%LocalAppData%\Programs\Git\cmd\git.exe" set "GIT_DIR=%LocalAppData%\Programs\Git\cmd;%LocalAppData%\Programs\Git\mingw64\bin"
 
 if defined GIT_DIR (
     set "PATH=!GIT_DIR!;!PATH!"
@@ -46,13 +49,13 @@ exit /b 1
 echo.
 echo [1/5] Initializing local repository in %CD%...
 if not exist ".git" (
-    git init
+    git init "%CD%"
     echo [INFO] Initialized empty Git repository.
 ) else (
     echo [INFO] Existing Git repository detected.
 )
 
-:: Switch/rename default branch to main
+:: Ensure on main branch
 git branch -M main
 
 echo.
@@ -63,13 +66,13 @@ for /f "tokens=*" %%g in ('git config user.name 2^>nul') do set "GIT_USER=%%g"
 for /f "tokens=*" %%g in ('git config user.email 2^>nul') do set "GIT_EMAIL=%%g"
 
 if not defined GIT_USER (
-    echo [NOTICE] Git user.name not set. Configuring: %USERNAME%
-    git config user.name "%USERNAME%"
+    echo [NOTICE] Git user.name not set. Configuring: sreeshtata
+    git config user.name "sreeshtata"
 )
 
 if not defined GIT_EMAIL (
-    echo [NOTICE] Git user.email not set. Configuring: %USERNAME%@spendwise.local
-    git config user.email "%USERNAME%@spendwise.local"
+    echo [NOTICE] Git user.email not set. Configuring: sreeshtata@users.noreply.github.com
+    git config user.email "sreeshtata@users.noreply.github.com"
 )
 
 echo.
@@ -79,10 +82,10 @@ set "REPO_URL=https://github.com/sreeshtata/spendwise-ai.git"
 git remote get-url origin >nul 2>&1
 if %ERRORLEVEL% equ 0 (
     git remote set-url origin !REPO_URL!
-    echo [INFO] Updated existing remote 'origin' to !REPO_URL!
+    echo [INFO] Remote 'origin' configured to !REPO_URL!
 ) else (
     git remote add origin !REPO_URL!
-    echo [INFO] Added remote 'origin' pointing to !REPO_URL!
+    echo [INFO] Added remote 'origin' -> !REPO_URL!
 )
 
 echo.
@@ -100,14 +103,14 @@ if defined STATUS_SIZE (
         git commit -m "feat: complete SpendWise AI Smart Spending Assistant with tests, PayPal sandbox, and docs"
         echo [INFO] Committed updated project files.
     ) else (
-        echo [INFO] No new changes to commit. Proceeding to push.
+        echo [INFO] Working tree is clean. Proceeding to push.
     )
 )
 if exist "!TEMP_STATUS!" del "!TEMP_STATUS!"
 
 echo.
 echo [5/5] Pushing to GitHub (main branch)...
-echo Note: If prompted, sign in via GitHub browser or enter your GitHub Personal Access Token.
+echo Note: If prompted, sign in via your browser or enter your GitHub Personal Access Token (PAT).
 echo.
 
 git push -u origin main
